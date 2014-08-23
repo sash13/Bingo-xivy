@@ -1,0 +1,121 @@
+# -*- coding: utf-8 -*-
+#:import C kivy.utils.get_color_from_hex
+
+<MainLayout@GridLayout>:
+    cols: 1
+    spacing: 10
+    row_default_height:
+        (0.1 * (self.width - self.spacing[0]) -
+        self.padding[0])
+    row_force_default: True
+
+<GameLayout@GridLayout>:
+    cols: 5
+    spacing: 10
+    row_default_height:
+        (0.2 * (self.width - self.spacing[0]) -
+        self.padding[0])
+    row_force_default: True
+
+<GameButton@Button>:
+    text: '[size=20]N[/size][/font]'
+    background_normal: 'button_normal.png'
+    background_down: 'button_down.png'
+    background_color: C('#2ecc71')
+    font_size: 14
+    halign: 'center'
+    markup: True
+    on_press: app.press(self)
+
+<ResetButton@Button>:
+    text: 'Reset'
+    background_normal: 'button_normal.png'
+    background_down: 'button_down.png'
+    background_color: C('#16a085')
+    font_size: 14
+    size: (100, 50)
+    halign: 'center'
+    markup: True
+    on_press: app.reset()
+
+MainLayout:
+
+    Label:
+        id: info_label
+        color: C('#16a085')
+    ResetButton:
+    GameLayout:
+        GameButton:
+            id: b1
+
+        GameButton:
+            id: b2
+
+        GameButton:
+            id: b3
+
+        GameButton:
+            id: b4
+
+        GameButton:
+            id: b5
+
+        GameButton:
+            id: b6
+
+        GameButton:
+            id: b7
+
+        GameButton:
+            id: b8
+
+        GameButton:
+            id: b9
+
+        GameButton:
+            id: b10
+
+        GameButton:
+            id: b11
+
+        GameButton:
+            id: b12
+
+        GameButton:
+            id: b13
+
+        GameButton:
+            id: b14
+
+        GameButton:
+            id: b15
+
+        GameButton:
+            id: b16
+
+        GameButton:
+            id: b17
+
+        GameButton:
+            id: b18
+
+        GameButton:
+            id: b19
+
+        GameButton:
+            id: b20
+
+        GameButton:
+            id: b21
+
+        GameButton:
+            id: b22
+
+        GameButton:
+            id: b23
+
+        GameButton:
+            id: b24
+
+        GameButton:
+            id: b25
