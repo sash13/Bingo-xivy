@@ -1,0 +1,3 @@
+title=VatnickBingo
+author=Mugi_chan
+orientation=portrait
