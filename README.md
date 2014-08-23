@@ -12,4 +12,4 @@ TODO
 ==========
 1. Replace style of buttons
 2. Add more game pattern for playing field
-3. Reconfigures sizes of widgets
+3. ~~Reconfigures sizes of widgets~~
