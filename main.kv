@@ -29,7 +29,7 @@
     on_press: app.press(self)
 
 <ResetButton@Button>:
-    text: 'Reset'
+    text: '[font=PT Sans Narrow][size=20]Заново[/size][/font]'
     background_normal: 'button_normal.png'
     background_down: 'button_down.png'
     background_color: C('#16a085')
@@ -43,6 +43,7 @@ MainLayout:
 
     Label:
         id: info_label
+        markup: True
         color: C('#16a085')
     ResetButton:
     GameLayout:
