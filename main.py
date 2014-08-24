@@ -4,36 +4,58 @@ kivy.require('1.8.0')
 
 from kivy.app import App
 from kivy.config import Config
-from kivy.graphics import Color, Rectangle
 from kivy.core.text import LabelBase
+from kivy.uix.button import Button
 from kivy.utils import get_color_from_hex as C
-
-texts = ["Деды \nвоевали", "Гейропа", "Бендеровцы", "Крымнаш", "Салоеды",
-         "...не\nпоставить\nна колени", "Укропы", "Майданутые", "Чурки",
-         "Мы\nпобедили", "Героям сала", "Пиндосы", "ПУТИН", "Госдеп",
-         "Федера-\nлизация", "Я помню,\nя горжусь", "Хунта", "Великая\nПобеда",
-         "Порядок", "Стабильность", "Жидо\nфашисты", "Обезьяна\nчерножопая",
-         "Нацисты", "Загниваюшая\nЕвропа", "Великая\nРусь"]
+from kivy.factory import Factory
 
 font_s = '[font=PT Sans Narrow][size=18]'
 font_e = '[/size][/font]'
+game_data_path = 'game_data.csv'
 
 def get_fast(s):
+    s = s.replace("\n", "\\n")
     return s[s.find('=18]')+len('=18]'):s.find('[/size]')]
 
 class MainApp(App):
 
     def build(self):
+        self.game_select = []
+        self.games_index = {}
         self.index = [0]*25
         self.game_end = 0
+
+        self.game_data = [[word for word in line.strip().split('|')] 
+		 for line in open(game_data_path)]
+        '''with open(game_data_path, 'rb') as f:
+            reader = csv.reader(f, delimiter='|', quoting=csv.QUOTE_NONE)
+            for row in reader:
+                self.game_data[row[0]] = row[1:]
+
+                btn = Button(text = row[0],size_hint_y = None, height = '40dp')
+                btn.bind(on_release=lambda btn:self.root.ids.drop.select(btn.text))
+                self.root.ids.drop.add_widget(btn)'''
+
+        self.game_select = self.game_data[0][1:]
+        self.root.ids.open_butt.text = 'Выбрано: ' + self.game_data[0][0]
+
+        for idx, words in enumerate(self.game_data):
+            word = words[0]
+            self.games_index[word] = idx
+            btn = Button(text = words[0],size_hint_y = None, height = '40dp')
+            btn.bind(on_release=lambda btn:self.root.ids.drop.select(btn.text))
+            self.root.ids.drop.add_widget(btn)
+
+        self.update_button()
+
+    def update_button(self):
         for (key, val) in self.root.ids.items():
             if key[0] == 'b':
 		i = int(key.split('b')[-1])
-		val.text = font_s + texts[i-1] + font_e
-
+		val.text = font_s + self.game_select[i-1].replace("\\n", "\n") + font_e
 
     def press(self, value):
-        idx = texts.index(get_fast(value.text))
+        idx = self.game_select.index(get_fast(value.text))
  
         if idx is not 12:
             value.background_color = [0, 1, 1, 1]
@@ -64,8 +86,8 @@ class MainApp(App):
             if ii is 4 or jj is 4:  # check main diagonal
 		self.game_end = 1
 	    if self.game_end:
-		self.root.ids.b13.color = [0, 0, 0, 1]
-		self.root.ids.b13.background_color = [0, 1, 1, 1]
+		#self.root.ids.b13.color = [0, 0, 0, 1]
+		self.root.ids.b13.background_color = [0.5, 0, 0, 1]
 		self.root.ids.info_label.text = font_s + 'BINGO!' + font_e
 		self.game_end = 0
 
@@ -77,9 +99,12 @@ class MainApp(App):
         self.index = [0]*25
 	self.root.ids.info_label.text = ''
 
-    def _update_rect(self, instance, value):
-        self.rect.pos = instance.pos
-        self.rect.size = instance.size
+    def drop_select(self, value):
+        self.root.ids.open_butt.text = 'Выбрано: ' + value
+        self.game_select = self.game_data[self.games_index[value]][1:]
+        self.reset()
+        self.update_button()
+
 
 if __name__ in ('__main__', '__android__'):
     Config.set('graphics', 'width', '540')

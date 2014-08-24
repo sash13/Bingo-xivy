@@ -39,8 +39,31 @@
     markup: True
     on_press: app.reset()
 
-MainLayout:
+<CustomDrop@DropDown>:
+    id: drop
+    Button:
+        text: 'butt 1'
+        size_hint_y: None
+        height: '40dp'
+    Button:
+        text: 'butt 2'
+        size_hint_y: None
+        height: '40dp'
 
+MainLayout:
+    __safe_id: [drop.__self__]
+
+    Button:
+        id: open_butt
+        text: "Hello"
+        size_hint_y: None
+        height: "40dp"
+        on_release: drop.open(self)
+
+    DropDown:
+        id: drop
+        on_parent: self.dismiss()
+        on_select: app.drop_select(args[1])
     Label:
         id: info_label
         markup: True
