@@ -7,7 +7,6 @@ from kivy.config import Config
 from kivy.core.text import LabelBase
 from kivy.uix.button import Button
 from kivy.utils import get_color_from_hex as C
-from kivy.factory import Factory
 
 font_s = '[font=PT Sans Narrow][size=18]'
 font_e = '[/size][/font]'
@@ -27,14 +26,6 @@ class MainApp(App):
 
         self.game_data = [[word for word in line.strip().split('|')] 
 		 for line in open(game_data_path)]
-        '''with open(game_data_path, 'rb') as f:
-            reader = csv.reader(f, delimiter='|', quoting=csv.QUOTE_NONE)
-            for row in reader:
-                self.game_data[row[0]] = row[1:]
-
-                btn = Button(text = row[0],size_hint_y = None, height = '40dp')
-                btn.bind(on_release=lambda btn:self.root.ids.drop.select(btn.text))
-                self.root.ids.drop.add_widget(btn)'''
 
         self.game_select = self.game_data[0][1:]
         self.root.ids.open_butt.text = 'Выбрано: ' + self.game_data[0][0]
