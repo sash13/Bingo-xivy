@@ -6,11 +6,14 @@ from kivy.app import App
 from kivy.config import Config
 from kivy.core.text import LabelBase
 from kivy.uix.button import Button
+from kivy.factory import Factory
 from kivy.utils import get_color_from_hex as C
 
 font_s = '[font=PT Sans Narrow][size=18]'
 font_e = '[/size][/font]'
 game_data_path = 'game_data.csv'
+text_choise = 'Выбрано: '
+game_pole = 25
 
 def get_fast(s):
     s = s.replace("\n", "\\n")
@@ -21,14 +24,15 @@ class MainApp(App):
     def build(self):
         self.game_select = []
         self.games_index = {}
-        self.index = [0]*25
+        self.index = [0]*game_pole
         self.game_end = 0
+        self.game_buttons = []
 
         self.game_data = [[word for word in line.strip().split('|')] 
 		 for line in open(game_data_path)]
 
         self.game_select = self.game_data[0][1:]
-        self.root.ids.open_butt.text = 'Выбрано: ' + self.game_data[0][0]
+        self.root.ids.open_butt.text = text_choise + self.game_data[0][0]
 
         for idx, words in enumerate(self.game_data):
             word = words[0]
@@ -37,13 +41,18 @@ class MainApp(App):
             btn.bind(on_release=lambda btn:self.root.ids.drop.select(btn.text))
             self.root.ids.drop.add_widget(btn)
 
+	for i in xrange(game_pole):
+            btn = Factory.GameButton()
+            btn.text = font_s + self.game_select[i].replace("\\n", "\n") + font_e
+            btn.id = 'b' + str(i)
+            self.game_buttons.append(btn)
+            self.root.ids.nomad.add_widget(btn)
+
         self.update_button()
 
     def update_button(self):
-        for (key, val) in self.root.ids.items():
-            if key[0] == 'b':
-		i = int(key.split('b')[-1])
-		val.text = font_s + self.game_select[i-1].replace("\\n", "\n") + font_e
+        for i, btn in enumerate(self.game_buttons):
+            btn.text = font_s + self.game_select[i].replace("\\n", "\n") + font_e
 
     def press(self, value):
         idx = self.game_select.index(get_fast(value.text))
@@ -78,20 +87,19 @@ class MainApp(App):
 		self.game_end = 1
 	    if self.game_end:
 		#self.root.ids.b13.color = [0, 0, 0, 1]
-		self.root.ids.b13.background_color = [0.5, 0, 0, 1]
+		self.game_buttons[12].background_color = [0.5, 0, 0, 1]
 		self.root.ids.info_label.text = font_s + 'BINGO!' + font_e
 		self.game_end = 0
 
     def reset(self):
-        for (key, val) in self.root.ids.items():
-            if key[0] == 'b':
-                val.background_color = C('#2ecc71')
-                val.color = [1, 1, 1, 1]
-        self.index = [0]*25
+        for btn in self.game_buttons:
+            btn.background_color = C('#2ecc71')
+            btn.color = [1, 1, 1, 1]
+        self.index = [0]*game_pole
 	self.root.ids.info_label.text = ''
 
     def drop_select(self, value):
-        self.root.ids.open_butt.text = 'Выбрано: ' + value
+        self.root.ids.open_butt.text = text_choise + value
         self.game_select = self.game_data[self.games_index[value]][1:]
         self.reset()
         self.update_button()
