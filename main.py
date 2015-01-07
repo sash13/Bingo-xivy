@@ -28,7 +28,7 @@ class MainApp(App):
         self.game_end = 0
         self.game_buttons = []
 
-        self.game_data = [[word for word in line.strip().split('|')] 
+        self.game_data = [[word for word in line.strip().split(',')] 
 		 for line in open(game_data_path)]
 
         self.game_select = self.game_data[0][1:]
